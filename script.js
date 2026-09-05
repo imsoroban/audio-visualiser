@@ -2,3 +2,9 @@
 var audio = document.getElementById("myAudio") 
 var canvas = document.getElementById("visualizer");
 var ctx = canvas.getContext("2d");
+
+// global variables for audio context
+let audioCtx;
+let analyser;
+let source;
+var isInitialized = false;
