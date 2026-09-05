@@ -8,3 +8,7 @@ let audioCtx;
 let analyser;
 let source;
 var isInitialized = false;
+
+// make sure canvas resolution isn't blurry
+canvas.width = 600;
+canvas.height = 250;
