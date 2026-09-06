@@ -1,5 +1,4 @@
-// audio script yay i hate js
-var audio = document.getElementById("myAudio") 
+var audio = document.getElementById("myAudio");
 var canvas = document.getElementById("visualizer");
 var ctx = canvas.getContext("2d");
 
@@ -14,15 +13,15 @@ canvas.width = 600;
 canvas.height = 250;
 
 audio.onplay = function() {
-  // web audio api needs to start on user interaction
   if (!isInitialized) {
     setupAudio();
     isInitialized = true;
+  } else if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
   }
 }
 
 function setupAudio() {
-  // chrome audio context fix
   AudioContext = window.AudioContext || window.webkitAudioContext;
   audioCtx = new AudioContext();
   
@@ -47,18 +46,22 @@ function render() {
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  var barWidth = (canvas.width / bufferLength) - 1;
+  var gap = 2;
+  var barWidth = (canvas.width / bufferLength) - gap;
   var x = 0;
 
-for (var i = 0; i < bufferLength; i++) {
+  for (var i = 0; i < bufferLength; i++) {
     var barHeight = dataArray[i];
     
+    // Scale height to match canvas height
+    var scaledHeight = (barHeight / 255) * canvas.height;
+    
     // green/cyan color scheme
-    ctx.fillStyle = 'rgb(0, ' + (barHeight + 100) + ', 200)';
+    ctx.fillStyle = 'rgb(0, ' + Math.min(255, barHeight + 100) + ', 200)';
     
     // draw bar from bottom
-    ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+    ctx.fillRect(x, canvas.height - scaledHeight, barWidth, scaledHeight);
 
-    x += barWidth + 2; // offset for next bar
+    x += barWidth + gap; // fixed offset for next bar
   }
 }
