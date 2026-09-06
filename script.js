@@ -49,3 +49,16 @@ function render() {
 
   var barWidth = (canvas.width / bufferLength) - 1;
   var x = 0;
+
+for (var i = 0; i < bufferLength; i++) {
+    var barHeight = dataArray[i];
+    
+    // green/cyan color scheme
+    ctx.fillStyle = 'rgb(0, ' + (barHeight + 100) + ', 200)';
+    
+    // draw bar from bottom
+    ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+    x += barWidth + 2; // offset for next bar
+  }
+}
